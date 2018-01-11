@@ -13,6 +13,7 @@ module.exports = function () {
     beforeLimit: this.$slots.beforeLimit ? this.$slots.beforeLimit : '',
     afterLimit: this.$slots.afterLimit ? this.$slots.afterLimit : '',
     beforeTable: this.$slots.beforeTable ? this.$slots.beforeTable : '',
-    afterTable: this.$slots.afterTable ? this.$slots.afterTable : ''
+    afterTable: this.$slots.afterTable ? this.$slots.afterTable : '',
+    afterPagination: this.$slots.afterPagination ? this.$slots.afterPagination : ''
   };
 };

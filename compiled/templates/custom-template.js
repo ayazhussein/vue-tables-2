@@ -3,7 +3,6 @@
 module.exports = function (h, modules, classes, slots) {
 
     var filterId = 'VueTables__search_' + this.id;
-    debugger;
     var genericFilter = this.opts.filterByColumn || !this.opts.filterable ? '' : h(
         'div',
         { 'class': 'VueTables__search-field Test' },
@@ -61,9 +60,13 @@ module.exports = function (h, modules, classes, slots) {
                     [slots.prependBody, modules.rows(classes), slots.appendBody]
                 ), slots.afterBody]
             )]
-        ), modules.pagination(Object.assign({}, classes.pagination, {
-            wrapper: classes.row + ' ' + classes.column,
-            nav: classes.center
-        })), slots.afterTable]
+        ), h(
+            'div',
+            { 'class': 'row' },
+            [modules.pagination(Object.assign({}, classes.pagination, {
+                wrapper: '' + classes.halfColumn,
+                nav: classes.center
+            })), slots.afterPagination]
+        ), slots.afterTable]
     );
 };
