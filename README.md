@@ -1,12 +1,10 @@
 # Vue Tables 2
 
+> Breaking change notice: As of version 1.2.0, multiple templates and\or themes are supported. If you were using the `customTemplate` option, please refer to the documentation below.
+
 [![npm version](https://badge.fury.io/js/vue-tables-2.svg)](https://badge.fury.io/js/vue-tables-2) [![GitHub stars](https://img.shields.io/github/stars/matfish2/vue-tables-2.svg)](https://github.com/matfish2/vue-tables-2/stargazers) [![GitHub license](https://img.shields.io/badge/license-MIT-blue.svg)](https://raw.githubusercontent.com/matfish2/vue-tables-2/master/LICENSE) [![npm](https://img.shields.io/npm/dt/vue-tables-2.svg)](https://www.npmjs.com/package/vue-tables-2) [![Build Status](https://travis-ci.org/matfish2/vue-tables-2.svg?branch=master)](https://travis-ci.org/matfish2/vue-tables-2)
 
 [Click here](https://jsfiddle.net/matfish2/jfa5t4sm/) to see it in action and fiddle with the various [options](#options)
-
-To help me maintain this project and add cool new features at your request, any donation would be appreciated.
-
-[![Donate](https://www.paypalobjects.com/en_US/i/btn/btn_donate_LG.gif)](https://www.paypal.com/cgi-bin/webscr?cmd=_s-xclick&hosted_button_id=W7EU772PUC3V4)
 
 - [Usage](#usage)
 - [Dependencies](#dependencies)
@@ -44,7 +42,7 @@ To help me maintain this project and add cool new features at your request, any 
 ## Compatibility
 
 * Vuex (>=2.0)
-* Bootstrap 3 compatible html output
+* Bootstrap 3 / Bootstrap 4 / Bulma
 
 ## Installation
 
@@ -61,29 +59,29 @@ import {ServerTable, ClientTable, Event} from 'vue-tables-2';
 ### Register the component(s)
 
 ```js
-Vue.use(ClientTable, [options], [useVuex], [customTemplate]);
+Vue.use(ClientTable, [options = {}], [useVuex = false], [theme = 'bootstrap3'], [template = 'default']);
 ```
 
 Or/And:
 
 ```js
-Vue.use(ServerTable, [options], [useVuex], [customTemplate]);
+Vue.use(ServerTable, [options = {}], [useVuex = false], [theme = 'bootstrap3'], [template = 'default']);
 ```
 
 * `useVuex` is a boolean indicating whether to use `vuex` for state management, or manage state on the component itself.
-If you set it to `true` you must add a `name` prop to your table, which will be used to to register a module on your store.
+If you set it to `true` you must add a `name` prop to your table, which will be used to register a module on your store.
 Use `vue-devtools` to look under the hood and see the current state.
 
-* `customTemplate` argument allows you to pass a custom template for the entire table.
-You can find the main template file under `lib/template.js`, which in turn requires the partials in the `template` folder.
-The template is written using `jsx`, so you will need a [jsx compiler](https://github.com/vuejs/babel-plugin-transform-vue-jsx) to modify it (the package is using the compiled version under the `compiled` folder).
-Copy it to your project and modify to your needs.
+* `theme` Use this option to select a CSS framework. Options:'bootstrap3','bootstrap4','bulma'. 
+You can also pass you own theme. Use a file from the `themes` folder as boilerplate.
 
-> Note: The template file is a function that receives a `source` parameter (`client` or `server`). E.g:
+* `template` Use this option to select an HTML template. Currently supported: 'default', 'footerPagination'
+You can also pass your own template. Use a file from the `templates` folder as boilerplate.
 
-```js
-Vue.use(ClientTable, {}, false, require('./template.js')('client'))
-```
+> Note: You may need to add a little styling of your own. 
+If you come up with some improvments to the templates or themes, which brings them closer to the optimum, you are welcome to send a PR.
+
+> Note: The template is written using `jsx`, so you will need a [jsx compiler](https://github.com/vuejs/babel-plugin-transform-vue-jsx) to modify it (the package is using the compiled version under the `compiled` folder).
 
 ### Using Script Tag
 
@@ -325,8 +323,6 @@ app.vue
 
 > Note: Don't include HTML directly in your dataset, as it will be parsed as plain text.
 
-> CSS Note: to center the pagination apply `text-align:center` to the wrapping element
-
 # Child Rows
 
 Child rows allow for a custom designed output area, namely a hidden child row underneath each row, whose content you are free to set yourself.
@@ -538,7 +534,8 @@ options: {
             },
             {
                 id: 2,
-                text: 'Cat'
+                text: 'Cat',
+                hide:true
             },
             {
                 id: 3,
@@ -555,6 +552,8 @@ options: {
 
 > Note: The values of this column should correspond to the `id`'s passed to the list.
 They will be automatically converted to their textual representation.
+
+> Adding `hide:true` to an item, will exclude it from the options presented to the user
 
 # Columns Visibility
 
@@ -632,12 +631,8 @@ Slots allow you to insert you own custom HTML in predefined positions within the
 * `beforeTable`: Before the table wrapper. After the controls row
 * `beforeFilter`: Before the global filter (`filterByColumn: false`)
 * `afterFilter`: After the global filter
-* `appendFilterContainer`: Append to global filter container (`filterByColumn: false`)
-* `prependFilterContainer`: Prepend to global filter container
 * `beforeLimit`: Before the per page control
 * `afterLimit`: After the per page control
-* `appendLimitContainer`: Append to per page control container
-* `prependLimitContainer`: Prepend to per page control container
 * `beforeFilters`: Before the filters row (`filterByColumn: true`)
 * `afterFilters`: After the filters row
 * `beforeBody`: Before the `<tbody>` tag
@@ -692,6 +687,7 @@ debounce | Number | Number of idle milliseconds (no key stroke) to wait before s
 filterable | Array / Boolean | Filterable columns `true` - All columns. | Set to `false` or an `empty array` to hide the filter(s). Affects also the single filter mode (`filterByColumn:false`)
 footerHeadings | Boolean | Display headings at the bottom of the table too | `false`
 headings | Object | Table headings. | Can be either a string or a function, if you wish to inject vue-compiled HTML.<br>E.g: `function(h) { return <h2>Title</h2>}`<br>Note that this example uses jsx, and not HTML.<br>The `this` context inside the function refers to the direct parent of the table instance.<br> If you are using vue 2.1 and above you can also use scoped slots, naming the slot "h__{column}"<br>The default rule is to extract from the first row properties with the underscores become spaces and the first letter capitalized
+groupBy (client-side) | String | Group rows by a common property. E.g, for a list of countries, group by the `continent` property | `false`
 headingsTooltips | Object | Table headings tooltips. | Can be either a string or a function, if you wish to inject vue-compiled HTML. Renders as `title` attribute of `<th>`. <br>E.g: `function(h) { return 'Expanded Title'}`<br>The `this` context inside the function refers to the direct parent of the table instance.
 highlightMatches | Boolean | Highlight matches | `false`
 initFilters | Object | Set initial values for all filter types: generic, by column or custom.<br><br> Accepts an object of key-value pairs, where the key is one of the following: <br><br>a. "GENERIC" - for the generic filter<br>b. column name - for by column filters.<br>c. filter name - for custom filters. <br><br>In case of date filters the date range should be passed as an object comprised of start and end properties, each being a moment object. | `{}`
@@ -712,7 +708,7 @@ responseAdapter (server-side) | Function | Transform the server response to matc
 rowClassCallback | Function | Add dynamic classes to table rows.<br><br> E.g function(row) { return `row-${row.id}`} <br><br>This can be useful for manipulating the appearance of rows based on the data they contain | `false`
 saveState | Boolean | Constantly save table state and reload it each time the component mounts. When setting it to true, use the `name` prop to set an identifier for the table | `false`
 serverMultiSorting | Boolean | Enable multiple columns sorting using Shift + Click on the server component | `false`
-skin | String | Space separated Bootstrap table styling classes | `table-striped table-bordered table-hover`
+skin | String | Space separated table styling classes | `table-striped table-bordered table-hover`
 sortIcon | String | Sort icon classes | `{ base:'glyphicon', up:'glyphicon-chevron-up', down:'glyphicon-chevron-down', is:'glyphicon-sort' }`
 sortable | Array |  Sortable columns | All columns
 sortingAlgorithm | Function | define your own sorting algorithm  | `function (data, column) { return data.sort(this.getSortFn(column));}`
