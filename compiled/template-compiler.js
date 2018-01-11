@@ -12,7 +12,8 @@ module.exports = function (template, theme) {
 
     var templates = {
         default: require('./templates/default'),
-        footerPagination: require('./templates/footer-pagination')
+        footerPagination: require('./templates/footer-pagination'),
+        customTemplate: require('./templates/custom-template')
     };
 
     return function (h) {
