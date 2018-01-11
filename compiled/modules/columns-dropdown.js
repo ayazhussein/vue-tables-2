@@ -16,14 +16,15 @@ module.exports = function (h) {
                 [h(
                     'input',
                     {
-                        attrs: { type: 'checkbox', value: column,
+                        attrs: { type: 'checkbox',
                             disabled: _this._onlyColumn(column)
+                        },
+                        domProps: {
+                            'value': column,
+                            'checked': _this.allColumns.includes(column)
                         },
                         on: {
                             'change': _this.toggleColumn.bind(_this, column)
-                        },
-                        domProps: {
-                            'checked': _this.allColumns.includes(column)
                         }
                     },
                     []

@@ -13,10 +13,13 @@ module.exports = function (h) {
             'input',
             { 'class': classes.input + ' ' + classes.small,
                 attrs: { type: 'text',
-                    value: _this.query,
+
                     placeholder: _this.display('filterPlaceholder'),
 
                     id: id
+                },
+                domProps: {
+                    'value': _this.query
                 },
                 on: {
                     'keyup': debounce(search, _this.opts.debounce)

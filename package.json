@@ -18,9 +18,9 @@
     "dist"
   ],
   "dependencies": {
-    "array-intersection": "^0.1.2",
     "clone": "^2.1.0",
     "debounce": "^1.1",
+    "lodash.intersection": "4.4.0",
     "merge": "^1.2.0",
     "vue": ">=2.0.0",
     "vue-pagination-2": "^1.3",
