@@ -62,7 +62,7 @@ module.exports = function (h, modules, classes, slots) {
             )]
         ), h(
             'div',
-            { 'class': 'row' },
+            { 'class': 'row mb-3' },
             [modules.pagination(Object.assign({}, classes.pagination, {
                 wrapper: '' + classes.halfColumn,
                 nav: classes.center
